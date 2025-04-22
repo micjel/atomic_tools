@@ -1,0 +1,3 @@
+[submodule "mylib_python"]
+	path = mylib_python
+	url = https://github.com/Takayuki-Miyagi/mylib_python.git
