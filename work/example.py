@@ -5,6 +5,7 @@ wdir = os.path.dirname(os.path.abspath(__file__))
 root = os.path.abspath(os.path.join(wdir, "../"))
 sys.path.append(os.path.join(root, "src"))
 
-import atomic_tools
+from atom import Atom, Snt
 
-He1 = atomic_tools.Atom(2, 2)
+He = Atom(2, 2)
+Fe_p1 = Atom(26, 25)
