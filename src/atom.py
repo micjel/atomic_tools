@@ -40,12 +40,22 @@ class Atom:
             print(f'Element {self.element} not found.')
             return None
     
-    def get_Z_symbol(self):
+    def get_elem(self):
         """
-        Get the atomic symbol corresponding to the atom with Z protons. 
+        Get element corresponding to the atom with Z protons. 
         """
-        Z_ion = int(self.get_Z()) - 1
-        return reference.ELEM[Z_ion] + str(Z_ion)
+        return reference.ELEM[self.Z]
+
+    def get_Z_from_elem(self, ref):
+        """
+        Get the atomic number from the reference string. 
+        """
+        try:
+            Z = reference.ELEM.index(ref)
+            return Z
+        except ValueError:
+            print(f'Element {ref} not found.')
+            return None
 
     def get_ion_ref(self, q):
         """
@@ -181,7 +191,21 @@ class Snt(Atom):
         Using the snt file format {shell}_{hamil}_{args}_{ref}_{element}_{emax}
         _{s}_eta{eta}.snt
         """
-        Atom.__init__
+        params = fname.split('_')
+        print(params)
+        print(params[5][1:])
+        self.shell = params[0]
+        self.hamil = params[1]
+        self.method = params[2]
+        self.emax = int(params[5][1:])
+        self.s = int(params[6][1:])
+        self.zeta = float(params[7][3:].replace('.snt', ''))
+
+        ref = params[3]
+        Z_elem = params[4]
+        
+        Atom.__init__(self, self.get_Z_from_elem(Z_elem), reference.ELEM.index(ref))
+
     def get_snt_fname(self):
         return f'{self.shell}_{self.hamil}_{self.method}_{self.get_ref()}_{self.element}_e{self.emax}_s{self.s}_eta{self.zeta}.snt'
     
@@ -259,3 +283,7 @@ class Snt(Atom):
         Return excitation energies and terms as list
         """
         return 0
+    
+He_params = Snt.from_file('0hw-shell_Coulomb_magnus_He2_He_e0_s500_eta0.snt')
+print(He_params.get_snt_fname())
+print(He_params.get_ion_snt_fname(-1))
